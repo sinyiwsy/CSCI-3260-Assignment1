@@ -145,7 +145,7 @@ void matrix(string obj) {
 	glm::mat4 modelScalingMatrix = glm::mat4(1.0f);
 
 	if (obj == "ground") {
-		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f));
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(4.0f, 1.0f, 4.0f));
 	}
 
