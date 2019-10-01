@@ -107,7 +107,7 @@ void keyboard(unsigned char key, int x, int y)
 }
 
 GLuint groundVaoID, groundVboID;
-GLuint pyramidVaoID, pyramidVboID, pyramidIndicesVboID;
+GLuint starVaoID, starVboID, starIndicesVboID;
 GLuint platformVaoID, platformVboID, platformIndicesVboID;
 GLuint gateVaoID, gateVboID, gateIndicesVboID;
 
@@ -118,12 +118,12 @@ void sendDataToOpenGL()
 	//create point, line, 2D object and 3D object here and bind to VAOs & VBOs
 	const GLfloat ground[] =
 	{
-		-1.0f, +0.0f, -1.0f,      +0.52f, +0.37f, +0.26f,
+		-1.0f, +0.0f, -1.0f,      +0.2f, +0.2f, +0.3f,
 		-1.0f, +0.0f, +1.0f,      +0.52f, +0.37f, +0.26f,
-		+1.0f, +0.0f, -1.0f,      +0.52f, +0.37f, +0.26f,
+		+1.0f, +0.0f, -1.0f,      +0.2f, +0.2f, +0.3f,
 		-1.0f, +0.0f, +1.0f,      +0.52f, +0.37f, +0.26f,
 		+1.0f, +0.0f, +1.0f,      +0.52f, +0.37f, +0.26f,
-		+1.0f, +0.0f, -1.0f,      +0.52f, +0.37f, +0.26f,
+		+1.0f, +0.0f, -1.0f,      +0.2f, +0.2f, +0.3f,
 	};
 
 	glGenVertexArrays(1, &groundVaoID);
@@ -137,31 +137,38 @@ void sendDataToOpenGL()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
 
 	//pyramid
-	const GLfloat pyramid[] =
+	const GLfloat star[] =
 	{
-		-1.0f, -1.0f, -1.0f,      +0.0f, +1.0f, +0.0f,
-		+0.0f, +1.0f, +0.0f,      +0.0f, +1.0f, +0.0f,
-		+1.0f, -1.0f, -1.0f,      +1.0f, +0.0f, +0.0f,
-		+1.0f, -1.0f, +1.0f,      +1.0f, +1.0f, +0.0f,
-		-1.0f, -1.0f, +1.0f,      +1.0f, +1.0f, +0.0f,
+		-1.0f, -1.0f, -1.0f,      +0.91f, +0.91f, +0.98f,
+		+0.0f, +1.0f, +0.0f,      +0.91f, +0.91f, +0.98f,
+		+1.0f, -1.0f, -1.0f,      +0.91f, +0.91f, +0.98f,
+		+1.0f, -1.0f, +1.0f,      +0.91f, +0.91f, +0.98f,
+		-1.0f, -1.0f, +1.0f,      +0.91f, +0.91f, +0.98f,
+		+0.0f, -3.0f, +0.0f,      +0.91f, +0.91f, +0.98f,
 	};
-	GLushort pyramidIndices[] = {
-	  0, 1, 2,	0, 2, 3,
-	  1, 2, 3,	0, 1, 4, 
-	  0, 4, 3,	1, 4, 3};
+	GLushort starIndices[] = {
+	  0, 1, 2,
+	  1, 2, 3,	
+	  0, 1, 4, 
+	  1, 4, 3,
+	  0, 5, 2,
+	  5, 2, 3,
+	  0, 5, 4,
+	  5, 4, 3,
+	};
 
-	glGenVertexArrays(1, &pyramidVaoID);
-	glBindVertexArray(pyramidVaoID);
-	glGenBuffers(1, &pyramidVboID);
-	glBindBuffer(GL_ARRAY_BUFFER, pyramidVboID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(pyramid), pyramid, GL_STATIC_DRAW);
+	glGenVertexArrays(1, &starVaoID);
+	glBindVertexArray(starVaoID);
+	glGenBuffers(1, &starVboID);
+	glBindBuffer(GL_ARRAY_BUFFER, starVboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(star), star, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
-	glGenBuffers(1, &pyramidIndicesVboID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pyramidIndicesVboID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(pyramidIndices) * sizeof(GLushort), pyramidIndices, GL_STATIC_DRAW);
+	glGenBuffers(1, &starIndicesVboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, starIndicesVboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(starIndices) * sizeof(GLushort), starIndices, GL_STATIC_DRAW);
 
 	//platform
 	const GLfloat platform[] =
@@ -300,17 +307,12 @@ void matrix(string obj) {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(4.0f, 1.0f, 4.0f));
 	}
-	else if (obj == "py") {
-		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 1.0f, -2.0f));
-		//modelRotationMatrix =  glm::rotate(glm::mat4(), -7.0f, glm::vec3(0.0f, 1.0f, 5.0f));
-	}
-	else if (obj == "py2") {
-		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(1.0f, 1.0f, 0.0f));
-		modelRotationMatrix =  glm::rotate(glm::mat4(), -7.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(1.2f, 1.2f, 1.2f));
+	else if (obj == "star") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 5.0f, -2.0f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.5f, 0.5f, 0.5f));
 	}
 	else if (obj == "gate") {
-		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 1.7f, -1.2f));
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 2.0f, -1.2f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(2.0f, 2.5f, 1.0f));
 	}
 	else if (obj == "platform") {
@@ -348,7 +350,7 @@ void paintGL(void)
 	//TODO:
 	//render your objects and control the transformation here
 	//specify the background color RGBA
-	glClearColor(0.0f, 0.0f, 0.1f, 0.0f); 
+	glClearColor(0.0f, 0.0f, 0.15f, 0.0f); 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Deph test
@@ -370,6 +372,10 @@ void paintGL(void)
 
 	matrix("gate");
 	glBindVertexArray(gateVaoID);
+	glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+
+	matrix("star");
+	glBindVertexArray(starVaoID);
 	glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
 
 	glFlush();
