@@ -106,8 +106,8 @@ void keyboard(unsigned char key, int x, int y)
 	//TODO:
 }
 
-GLuint groundVaoID;
-GLuint groundVboID;
+GLuint groundVaoID, groundVboID;
+GLuint pyramidVaoID, pyramidVboID, pyramidIndicesVboID;
 
 void sendDataToOpenGL()
 {
@@ -133,6 +133,35 @@ void sendDataToOpenGL()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
 
+	const GLfloat pyramid[] =
+	{
+		-1.0f, -1.0f, -1.0f,      +0.0f, +1.0f, +0.0f,
+		+0.0f, +1.0f, +0.0f,      +0.0f, +1.0f, +0.0f,
+		+1.0f, -1.0f, -1.0f,      +1.0f, +0.0f, +0.0f,
+		+1.0f, -1.0f, +1.0f,      +1.0f, +1.0f, +0.0f,
+		-1.0f, -1.0f, +1.0f,      +1.0f, +1.0f, +0.0f,
+	};
+	GLushort pyramidIndices[] = {
+	  0, 1, 2,	0, 2, 3,
+	  1, 2, 3,	0, 1, 4, 
+	  0, 4, 3,	1, 4, 3};
+
+
+	// For pyramid
+	glGenVertexArrays(1, &pyramidVaoID);
+	glBindVertexArray(pyramidVaoID);
+	// Bind Vertices Data to Buffer
+	glGenBuffers(1, &pyramidVboID);
+	glBindBuffer(GL_ARRAY_BUFFER, pyramidVboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(pyramid), pyramid, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+	// Bind Indices Data to Buffer
+	glGenBuffers(1, &pyramidIndicesVboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pyramidIndicesVboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(pyramidIndices) * sizeof(GLushort), pyramidIndices, GL_STATIC_DRAW);
 
 
 }
@@ -148,7 +177,15 @@ void matrix(string obj) {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(4.0f, 1.0f, 4.0f));
 	}
-
+	else if (obj == "py") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 1.0f, -2.0f));
+		//modelRotationMatrix =  glm::rotate(glm::mat4(), -7.0f, glm::vec3(0.0f, 1.0f, 5.0f));
+	}
+	else if (obj == "py2") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(1.0f, 1.0f, 0.0f));
+		modelRotationMatrix =  glm::rotate(glm::mat4(), -7.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(1.2f, 1.2f, 1.2f));
+	}
 	GLint modelTransformMatrixUniformLocation = glGetUniformLocation(programID, "modelTransformMatrix");
 	GLint modelRotateMatrixUniformLocation = glGetUniformLocation(programID, "modelRotationMatrix");
 	GLint modelScalingMatrixUniformLocation = glGetUniformLocation(programID, "modelScalingMatrix");
@@ -159,9 +196,9 @@ void matrix(string obj) {
 
 	glm::mat4 Projection = glm::perspective(30.0f, 1.0f, 2.0f, 20.0f);
 	glm::mat4 View = glm::lookAt(
-		glm::vec3(0, -2.0, 0),
+		glm::vec3(0, 5.0, 0),
 		glm::vec3(0, 0, -10),
-		glm::vec3(0, 1, 0)
+		glm::vec3(0, -1, 0)
 	);
 	glm::mat4 Model = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.5f, -5.0f));;
 	glm::mat4 mvp = Projection * View * Model;
@@ -186,6 +223,14 @@ void paintGL(void)
 	matrix("ground");
 	glBindVertexArray(groundVaoID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	matrix("py");
+	glBindVertexArray(pyramidVaoID);
+	glDrawElements(GL_TRIANGLES, 3 * 4 * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
+
+	matrix("py2");
+	glBindVertexArray(pyramidVaoID);
+	glDrawElements(GL_TRIANGLES, 3 * 4 * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
 
 	glFlush();
 	glutPostRedisplay();
