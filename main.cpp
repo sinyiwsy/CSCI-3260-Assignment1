@@ -15,8 +15,8 @@ using glm::mat4;
 
 GLint programID;
 
-float x_delta = 0.1f;
-int x_press_num = 0;
+float y_delta = 0.1f;
+int y_press_num = 0;
 
 bool checkStatus(
 	GLuint objectID,
@@ -104,13 +104,23 @@ void installShaders()
 void keyboard(unsigned char key, int x, int y)
 {
 	//TODO:
+	if (key == 'w')
+	{
+		y_press_num -= 1;
+	}
+	if (key == 's')
+	{
+		y_press_num += 1;
+	}
 }
+
+
 
 GLuint groundVaoID, groundVboID;
 GLuint starVaoID, starVboID, starIndicesVboID;
 GLuint platformVaoID, platformVboID, platformIndicesVboID;
 GLuint gateVaoID, gateVboID, gateIndicesVboID;
-
+GLuint peopleVaoID, peopleVboID, peopleIndicesVboID;
 
 void sendDataToOpenGL()
 {
@@ -136,14 +146,13 @@ void sendDataToOpenGL()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
 
-	//pyramid
 	const GLfloat star[] =
 	{
-		-1.0f, -1.0f, -1.0f,      +0.91f, +0.91f, +0.98f,
+		-1.0f, -1.0f, -1.0f,      +0.3f, +0.3f, +0.3f,
 		+0.0f, +1.0f, +0.0f,      +0.91f, +0.91f, +0.98f,
-		+1.0f, -1.0f, -1.0f,      +0.91f, +0.91f, +0.98f,
-		+1.0f, -1.0f, +1.0f,      +0.91f, +0.91f, +0.98f,
-		-1.0f, -1.0f, +1.0f,      +0.91f, +0.91f, +0.98f,
+		+1.0f, -1.0f, -1.0f,      +0.7f, +0.7f, +0.7f,
+		+1.0f, -1.0f, +1.0f,      +0.3f, +0.3f, +0.3f,
+		-1.0f, -1.0f, +1.0f,      +0.7f, +0.7f, +0.7f,
 		+0.0f, -3.0f, +0.0f,      +0.91f, +0.91f, +0.98f,
 	};
 	GLushort starIndices[] = {
@@ -293,6 +302,49 @@ void sendDataToOpenGL()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gateIndicesVboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(gateIndices) * sizeof(GLushort), gateIndices, GL_STATIC_DRAW);
 
+	const GLfloat people[] =
+	{
+		//head
+		-0.2f, 0.5f, 0.0f,  0.0f, 0.0f, 0.0f,
+		0.2f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f,
+		-0.2f, 0.1f, 0.0f, 0.0f, 0.0f, 0.0f,
+		0.2f, 0.1f, 0.0f, 0.0f, 0.0f, 0.0f,
+		//body and leg
+		0.0f, 0.05f,0.0f, 0.0f, 0.0f, 0.0f,
+		-0.3f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f,
+		0.3f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f,
+
+		0.3f, -0.55f,0.0f, 0.0f, 0.0f, 0.0f,
+		0.09f, -0.55f, 0.0f, 0.0f, 0.0f, 0.0f,
+		0.2f, -1.0f,0.0f, 0.0f, 0.0f, 0.0f,
+
+		-0.3f, -0.55f,0.0f, 0.0f, 0.0f, 0.0f,
+		-0.09f, -0.55f, 0.0f, 0.0f, 0.0f, 0.0f,
+		-0.2f, -1.0f,0.0f, 0.0f, 0.0f, 0.0f,
+
+	};
+	GLushort peopleIndices[] = {
+	  //head
+		0,1,2,
+		1,2,3,
+		//body and leg
+		4,5,6,
+		7,8,9,
+		10,11,12,
+	};
+
+	glGenVertexArrays(1, &peopleVaoID);
+	glBindVertexArray(peopleVaoID);
+	glGenBuffers(1, &peopleVboID);
+	glBindBuffer(GL_ARRAY_BUFFER, peopleVboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(people), people, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+	glGenBuffers(1, &peopleIndicesVboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, peopleIndicesVboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(peopleIndices) * sizeof(GLushort), peopleIndices, GL_STATIC_DRAW);
 
 }
 
@@ -310,6 +362,7 @@ void matrix(string obj) {
 	else if (obj == "star") {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 5.0f, -2.0f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.5f, 0.5f, 0.5f));
+		modelRotationMatrix =  glm::rotate(glm::mat4(), 7.0f, glm::vec3(0, 1, 0));
 	}
 	else if (obj == "gate") {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 2.0f, -1.2f));
@@ -322,6 +375,10 @@ void matrix(string obj) {
 	else if (obj == "platform2") {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.2f, -1.0f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(3.25f, 0.2f, 1.75f));
+	}
+	else if (obj == "people") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 1.5f, y_delta * y_press_num));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.5f, 1.0f, 1.0f));
 	}
 
 	GLint modelTransformMatrixUniformLocation = glGetUniformLocation(programID, "modelTransformMatrix");
@@ -374,9 +431,13 @@ void paintGL(void)
 	glBindVertexArray(gateVaoID);
 	glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
 
-	matrix("star");
-	glBindVertexArray(starVaoID);
+	matrix("people");
+	glBindVertexArray(peopleVaoID);
 	glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+
+	/*matrix("star");
+	glBindVertexArray(starVaoID);
+	glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);*/
 
 	glFlush();
 	glutPostRedisplay();
