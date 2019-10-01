@@ -108,6 +108,7 @@ void keyboard(unsigned char key, int x, int y)
 
 GLuint groundVaoID, groundVboID;
 GLuint pyramidVaoID, pyramidVboID, pyramidIndicesVboID;
+GLuint platformVaoID, platformVboID, platformIndicesVboID;
 GLuint gateVaoID, gateVboID, gateIndicesVboID;
 
 
@@ -117,12 +118,12 @@ void sendDataToOpenGL()
 	//create point, line, 2D object and 3D object here and bind to VAOs & VBOs
 	const GLfloat ground[] =
 	{
-		-1.0f, +0.0f, -1.0f,      +0.8f, +0.8f, +0.8f,
-		-1.0f, +0.0f, +1.0f,      +0.8f, +0.8f, +0.8f,
-		+1.0f, +0.0f, -1.0f,      +0.8f, +0.8f, +0.8f,
-		-1.0f, +0.0f, +1.0f,      +0.8f, +0.8f, +0.8f,
-		+1.0f, +0.0f, +1.0f,      +0.8f, +0.8f, +0.8f,
-		+1.0f, +0.0f, -1.0f,      +0.8f, +0.8f, +0.8f,
+		-1.0f, +0.0f, -1.0f,      +0.52f, +0.37f, +0.26f,
+		-1.0f, +0.0f, +1.0f,      +0.52f, +0.37f, +0.26f,
+		+1.0f, +0.0f, -1.0f,      +0.52f, +0.37f, +0.26f,
+		-1.0f, +0.0f, +1.0f,      +0.52f, +0.37f, +0.26f,
+		+1.0f, +0.0f, +1.0f,      +0.52f, +0.37f, +0.26f,
+		+1.0f, +0.0f, -1.0f,      +0.52f, +0.37f, +0.26f,
 	};
 
 	glGenVertexArrays(1, &groundVaoID);
@@ -135,6 +136,7 @@ void sendDataToOpenGL()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
 
+	//pyramid
 	const GLfloat pyramid[] =
 	{
 		-1.0f, -1.0f, -1.0f,      +0.0f, +1.0f, +0.0f,
@@ -160,6 +162,47 @@ void sendDataToOpenGL()
 	glGenBuffers(1, &pyramidIndicesVboID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pyramidIndicesVboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(pyramidIndices) * sizeof(GLushort), pyramidIndices, GL_STATIC_DRAW);
+
+	//platform
+	const GLfloat platform[] =
+	{
+		-1.0f, +1.0f, -1.0f,  +0.5f, +0.5f, +0.5f,
+		-1.0f, -1.0f, -1.0f,  +0.5f, +0.5f, +0.5f,
+		+1.0f, +1.0f, -1.0f,  +0.8f, +0.8f, +0.8f,
+		-1.0f, +1.0f, -1.0f,  +0.8f, +0.8f, +0.8f,
+		-1.0f, -1.0f, +1.0f,  +0.5f, +0.5f, +0.5f,
+		+1.0f, -1.0f, +1.0f,  +0.5f, +0.5f, +0.5f,
+		+1.0f, +1.0f, +1.0f,  +0.8f, +0.8f, +0.8f,
+		-1.0f, +1.0f, +1.0f,  +0.8f, +0.8f, +0.8f,
+	};
+	GLushort platformIndices[] = {
+	  0,1,2,
+	  0,2,3,
+	  0,3,7,
+	  0,4,7,
+	  0,4,5,
+	  0,5,1,
+	  6,3,2,
+	  6,3,7,
+	  6,7,4,
+	  6,5,4,
+	  6,2,1,
+	  6,5,1,
+
+	};
+
+	glGenVertexArrays(1, &platformVaoID);
+	glBindVertexArray(platformVaoID);
+	glGenBuffers(1, &platformVboID);
+	glBindBuffer(GL_ARRAY_BUFFER, platformVboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(platform), platform, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+	glGenBuffers(1, &platformIndicesVboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, platformIndicesVboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(platformIndices) * sizeof(GLushort), platformIndices, GL_STATIC_DRAW);
 
 	//Gate
 	const GLfloat gate[] =
@@ -267,9 +310,18 @@ void matrix(string obj) {
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(1.2f, 1.2f, 1.2f));
 	}
 	else if (obj == "gate") {
-		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 1.7f, -1.0f));
-		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(2.0f, 2.3f, 1.0f));
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 1.7f, -1.2f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(2.0f, 2.5f, 1.0f));
 	}
+	else if (obj == "platform") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(3.5f, 0.2f, 2.0f));
+	}
+	else if (obj == "platform2") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.2f, -1.0f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(3.25f, 0.2f, 1.75f));
+	}
+
 	GLint modelTransformMatrixUniformLocation = glGetUniformLocation(programID, "modelTransformMatrix");
 	GLint modelRotateMatrixUniformLocation = glGetUniformLocation(programID, "modelRotationMatrix");
 	GLint modelScalingMatrixUniformLocation = glGetUniformLocation(programID, "modelScalingMatrix");
@@ -307,6 +359,14 @@ void paintGL(void)
 	matrix("ground");
 	glBindVertexArray(groundVaoID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	matrix("platform");
+	glBindVertexArray(platformVaoID);
+	glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+
+	matrix("platform2");
+	glBindVertexArray(platformVaoID);
+	glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
 
 	matrix("gate");
 	glBindVertexArray(gateVaoID);
