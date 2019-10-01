@@ -108,6 +108,8 @@ void keyboard(unsigned char key, int x, int y)
 
 GLuint groundVaoID, groundVboID;
 GLuint pyramidVaoID, pyramidVboID, pyramidIndicesVboID;
+GLuint gateVaoID, gateVboID, gateIndicesVboID;
+
 
 void sendDataToOpenGL()
 {
@@ -115,12 +117,12 @@ void sendDataToOpenGL()
 	//create point, line, 2D object and 3D object here and bind to VAOs & VBOs
 	const GLfloat ground[] =
 	{
-		-1.0f, +0.0f, -1.0f,      +0.0f, +0.0f, +1.0f,
-		-1.0f, +0.0f, +1.0f,      +0.0f, +0.0f, +1.0f,
-		+1.0f, +0.0f, -1.0f,      +0.0f, +0.0f, +1.0f,
-		-1.0f, +0.0f, +1.0f,      +0.0f, +0.0f, +1.0f,
-		+1.0f, +0.0f, +1.0f,      +0.0f, +0.0f, +1.0f,
-		+1.0f, +0.0f, -1.0f,      +0.0f, +0.0f, +1.0f,
+		-1.0f, +0.0f, -1.0f,      +0.8f, +0.8f, +0.8f,
+		-1.0f, +0.0f, +1.0f,      +0.8f, +0.8f, +0.8f,
+		+1.0f, +0.0f, -1.0f,      +0.8f, +0.8f, +0.8f,
+		-1.0f, +0.0f, +1.0f,      +0.8f, +0.8f, +0.8f,
+		+1.0f, +0.0f, +1.0f,      +0.8f, +0.8f, +0.8f,
+		+1.0f, +0.0f, -1.0f,      +0.8f, +0.8f, +0.8f,
 	};
 
 	glGenVertexArrays(1, &groundVaoID);
@@ -146,11 +148,8 @@ void sendDataToOpenGL()
 	  1, 2, 3,	0, 1, 4, 
 	  0, 4, 3,	1, 4, 3};
 
-
-	// For pyramid
 	glGenVertexArrays(1, &pyramidVaoID);
 	glBindVertexArray(pyramidVaoID);
-	// Bind Vertices Data to Buffer
 	glGenBuffers(1, &pyramidVboID);
 	glBindBuffer(GL_ARRAY_BUFFER, pyramidVboID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(pyramid), pyramid, GL_STATIC_DRAW);
@@ -158,10 +157,91 @@ void sendDataToOpenGL()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
-	// Bind Indices Data to Buffer
 	glGenBuffers(1, &pyramidIndicesVboID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pyramidIndicesVboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(pyramidIndices) * sizeof(GLushort), pyramidIndices, GL_STATIC_DRAW);
+
+	//Gate
+	const GLfloat gate[] =
+	{
+		//first part 0-12
+		-0.9f, -0.6f, 0.0f,     +0.3f, +0.3f, +0.3f,
+		-0.5f, -0.6f, 0.0f,     +0.3f, +0.3f, +0.3f,
+		-0.95f, -0.2f, 0.0f,    +0.3f, +0.3f, +0.3f,
+		-0.8f, -0.1f, 0.0f,		+0.3f, +0.3f, +0.3f,
+		-0.5f, -0.1f, 0.0f,		+0.3f, +0.3f, +0.3f,
+		-1.0f, 0.0f, 0.0f,		+0.3f, +0.3f, +0.3f,
+		-0.6f, 0.0f, 0.0f,		+0.3f, +0.3f, +0.3f,
+		-0.9f, 0.3f, 0.0f,		+0.3f, +0.3f, +0.3f,
+		-0.6f, 0.15f, 0.0f,		+0.3f, +0.3f, +0.3f,
+		-0.8f, 0.3f, 0.0f,		+0.3f, +0.3f, +0.3f,
+		-0.8f, 0.4f, 0.0f,		+0.3f, +0.3f, +0.3f,
+		-0.5f, 0.45f, 0.0f,		+0.3f, +0.3f, +0.3f,
+		-0.5f, 0.15f, 0.0f,		+0.3f, +0.3f, +0.3f,
+		//second part
+		-0.42f, 0.47f, 0.0f, +0.3f, +0.3f, +0.3f,
+		-0.45f, 0.15f, 0.0f, +0.3f, +0.3f, +0.3f,
+		0.35f, 0.35f, 0.0f,+0.3f, +0.3f, +0.3f,
+		0.2f, 0.0f, 0.0f,+0.3f, +0.3f, +0.3f,
+		0.48f, 0.3f, 0.0f,+0.3f, +0.3f, +0.3f,
+		0.25f, -0.6f, 0.0f, +0.3f, +0.3f, +0.3f,
+		0.67f, -0.6f, 0.0f,+0.3f, +0.3f, +0.3f,
+		0.62f, -0.15f, 0.0f,+0.3f, +0.3f, +0.3f,
+		0.8f, -0.1f, 0.0f,+0.3f, +0.3f, +0.3f,
+		0.75f, 0.05f, 0.0f, +0.3f, +0.3f, +0.3f,
+		0.8f, 0.1f, 0.0f, +0.3f, +0.3f, +0.3f,
+		1.0f, 0.35f, 0.0f,+0.3f, +0.3f, +0.3f,
+		0.9f, 0.4f, 0.0f,+0.3f, +0.3f, +0.3f,
+		0.8f, 0.6f, 0.0f,+0.3f, +0.3f, +0.3f,
+		0.65f,  0.4f, 0.0f, +0.3f, +0.3f, +0.3f,
+		0.6f, 0.45f, 0.0f,+0.3f, +0.3f, +0.3f,
+		0.5f, 0.4f, 0.0f, +0.3f, +0.3f, +0.3f,
+	};
+	GLushort gateIndices[] = {
+		0, 1, 2,
+		2, 1, 3,
+		3, 1, 4, 
+		3, 4, 6, 
+		3, 6, 5, 
+		5, 6, 7, 
+		6, 7, 8, 
+		7, 8, 9,
+		8, 9, 10,
+		8, 10, 12, 
+		10, 12, 11,
+
+		//second
+		13,14,15,
+		14,15,16,
+		15,16,17,
+		16,17,18,
+		17,18,19,
+		17,19,20,
+		17,20,21,
+		17,21,22,
+		17,22,23,
+		17,29,23,
+		29,23,27,
+		29,27,28,
+		27,23,24,
+		27,24,25,
+		27,26,25,
+		26,27,28,
+
+	};
+
+	glGenVertexArrays(1, &gateVaoID);
+	glBindVertexArray(gateVaoID);
+	glGenBuffers(1, &gateVboID);
+	glBindBuffer(GL_ARRAY_BUFFER, gateVboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(gate), gate, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+	glGenBuffers(1, &gateIndicesVboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gateIndicesVboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(gateIndices) * sizeof(GLushort), gateIndices, GL_STATIC_DRAW);
 
 
 }
@@ -185,6 +265,10 @@ void matrix(string obj) {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(1.0f, 1.0f, 0.0f));
 		modelRotationMatrix =  glm::rotate(glm::mat4(), -7.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(1.2f, 1.2f, 1.2f));
+	}
+	else if (obj == "gate") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 1.7f, -1.0f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(2.0f, 2.3f, 1.0f));
 	}
 	GLint modelTransformMatrixUniformLocation = glGetUniformLocation(programID, "modelTransformMatrix");
 	GLint modelRotateMatrixUniformLocation = glGetUniformLocation(programID, "modelRotationMatrix");
@@ -224,13 +308,9 @@ void paintGL(void)
 	glBindVertexArray(groundVaoID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
-	matrix("py");
-	glBindVertexArray(pyramidVaoID);
-	glDrawElements(GL_TRIANGLES, 3 * 4 * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
-
-	matrix("py2");
-	glBindVertexArray(pyramidVaoID);
-	glDrawElements(GL_TRIANGLES, 3 * 4 * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
+	matrix("gate");
+	glBindVertexArray(gateVaoID);
+	glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
 
 	glFlush();
 	glutPostRedisplay();
