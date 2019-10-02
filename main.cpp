@@ -677,7 +677,7 @@ void matrix(string obj) {
 
 void paintGL(void)
 {
-	printf("%d\t%d\t%d\t%d\n", st_time, ck_time, now_t, ready);
+	//printf("%d\t%d\t%d\t%d\n", st_time, ck_time, now_t, ready);
 	//TODO:
 	//render your objects and control the transformation here
 	//specify the background color RGBA
