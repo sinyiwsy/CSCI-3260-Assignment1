@@ -9,14 +9,19 @@
 #include "Dependencies\glm\gtc\matrix_transform.hpp"
 #include <iostream>
 #include <fstream>
+#include <time.h>
+
 using namespace std;
 using glm::vec3;
 using glm::mat4;
 
+clock_t now_t;
+int st_time = 0;
 GLint programID;
 
 float y_delta = 0.1f;
 int y_press_num = 0;
+int ah_animated = 0;
 
 bool checkStatus(
 	GLuint objectID,
@@ -112,11 +117,16 @@ void keyboard(unsigned char key, int x, int y)
 	{
 		y_press_num += 1;
 	}
+	if (key == 'a' && ah_animated == 0) {
+		now_t = clock();
+		ah_animated = 1;
+	}
 }
 
 
 
 GLuint groundVaoID, groundVboID;
+GLuint ahVaoID, ahVboID;
 GLuint starVaoID, starVboID, starIndicesVboID;
 GLuint platformVaoID, platformVboID, platformIndicesVboID;
 GLuint gateVaoID, gateVboID, gateIndicesVboID;
@@ -145,6 +155,60 @@ void sendDataToOpenGL()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+
+	const GLfloat ah[] =
+	{
+		-0.7f, -0.2f, -0.0f, 0.7f, 0.5f, 0.5f,
+		-0.65f, -0.2f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.55f, 0.3f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.5f, -0.2f, 0.0f, 0.7f, 0.5f, 0.5f,
+		-0.4f, -0.2f, 0.0f, 0.7f, 0.5f, 0.5f,
+		-0.55f, 0.3f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.67f, 0.0f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.65f, 0.05f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.4f, -0.1f,0.0f,0.7f, 0.5f, 0.5f,
+
+		-0.3f, 0.3f, 0.0f, 0.7f, 0.5f, 0.5f,
+		-0.2f, 0.3f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.3f, -0.2f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.3f, -0.2f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.2f,0.05f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.1f, 0.05f,0.0f,0.7f, 0.5f, 0.5f,
+		-0.2f,0.05f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.1f, 0.05f,0.0f,0.7f, 0.5f, 0.5f,
+		-0.05f, -0.2f, 0.0f,0.7f, 0.5f, 0.5f,
+
+		-0.3f + 0.3f, 0.3f , 0.0f, 0.7f, 0.5f, 0.5f,
+		-0.2f + 0.3f, 0.3f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.3f + 0.3f, -0.2f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.3f + 0.3f, -0.2f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.2f + 0.3f,0.05f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.1f + 0.3f, 0.05f,0.0f,0.7f, 0.5f, 0.5f,
+		-0.2f + 0.3f,0.05f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.1f + 0.3f, 0.05f,0.0f,0.7f, 0.5f, 0.5f,
+		-0.05f + 0.3f, -0.2f, 0.0f,0.7f, 0.5f, 0.5f,
+
+		-0.3f + 0.6f, 0.3f , 0.0f, 0.7f, 0.5f, 0.5f,
+		-0.2f + 0.6f, 0.3f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.3f + 0.6f, -0.2f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.3f + 0.6f, -0.2f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.2f + 0.6f,0.05f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.1f + 0.6f, 0.05f,0.0f,0.7f, 0.5f, 0.5f,
+		-0.2f + 0.6f,0.05f, 0.0f,0.7f, 0.5f, 0.5f,
+		-0.1f + 0.6f, 0.05f,0.0f,0.7f, 0.5f, 0.5f,
+		-0.05f + 0.6f, -0.2f, 0.0f,0.7f, 0.5f, 0.5f,
+	};
+
+	glGenVertexArrays(1, &ahVaoID);
+	glBindVertexArray(ahVaoID);
+	glGenBuffers(1, &ahVboID);
+	glBindBuffer(GL_ARRAY_BUFFER, ahVboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(ah), ah, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+
 
 	const GLfloat star[] =
 	{
@@ -346,6 +410,9 @@ void sendDataToOpenGL()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, peopleIndicesVboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(peopleIndices) * sizeof(GLushort), peopleIndices, GL_STATIC_DRAW);
 
+
+
+
 }
 
 void matrix(string obj) {
@@ -380,6 +447,15 @@ void matrix(string obj) {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 1.5f, y_delta * y_press_num));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.5f, 1.0f, 1.0f));
 	}
+	else if (obj == "ah") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 4.0f, 0.0f));
+		st_time = (clock() - now_t);
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.001 *st_time, 0.001 *st_time, 1.0f));
+		if (st_time >= 2000) {
+			now_t = clock();
+			ah_animated = 0;
+		}
+	}
 
 	GLint modelTransformMatrixUniformLocation = glGetUniformLocation(programID, "modelTransformMatrix");
 	GLint modelRotateMatrixUniformLocation = glGetUniformLocation(programID, "modelRotationMatrix");
@@ -404,6 +480,7 @@ void matrix(string obj) {
 
 void paintGL(void)
 {
+	//printf("%d\n", ah_animated);
 	//TODO:
 	//render your objects and control the transformation here
 	//specify the background color RGBA
@@ -418,6 +495,12 @@ void paintGL(void)
 	matrix("ground");
 	glBindVertexArray(groundVaoID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	if (ah_animated == 1) {
+		matrix("ah");
+		glBindVertexArray(ahVaoID);
+		glDrawArrays(GL_TRIANGLES, 0, 50);
+	}
 
 	matrix("platform");
 	glBindVertexArray(platformVaoID);
