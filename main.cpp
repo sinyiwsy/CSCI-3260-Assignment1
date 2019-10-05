@@ -21,8 +21,10 @@ clock_t now_t2;
 int ck_time = 0;
 GLint programID;
 
-float y_delta = 0.1f;
-int y_press_num = 0;
+float scale_delta = 0.01f;
+int scale_press_num = 0;
+float x_delta = 0.1f;
+int x_press_num = 0;
 int ah_animated = 0; 
 int ready = 0;
 int isClockwise = 1;
@@ -145,11 +147,28 @@ void keyboard(unsigned char key, int x, int y)
 	{
 		season = 3;
 	}
+	if (key == 'm')
+	{
+		x_press_num++;
+	}
+	if (key == 'n')
+	{
+		x_press_num--;
+	}
+	if (key == 'x')
+	{
+		scale_press_num++;
+	}
+	if (key == 'z')
+	{
+		scale_press_num--;
+	}
 }
 
 
 
 GLuint groundVaoID, groundVboID;
+GLuint moonVaoID, moonVboID;
 GLuint ahVaoID, ahVboID;
 GLuint treeVaoID, treeVboID, treeIndicesVboID;
 GLuint tree1VaoID, tree1VboID, tree1IndicesVboID;
@@ -180,6 +199,62 @@ void sendDataToOpenGL()
 	glGenBuffers(1, &groundVboID);
 	glBindBuffer(GL_ARRAY_BUFFER, groundVboID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(ground), ground, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+
+	const GLfloat moon[] =
+	{
+		1.000f, 0.000f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.839f, -0.544f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.408f, 0.913f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.154f, -0.988f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.667f, 0.745f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.965f, -0.262f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.952f, -0.305f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.633f, 0.774f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.110f, -0.994f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.448f, 0.894f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.862f, -0.506f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.999f, -0.044f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.814f, 0.581f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.367f, -0.930f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.198f, 0.980f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.699f, -0.715f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.976f, 0.219f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.938f, 0.347f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.598f, -0.801f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.066f, 0.998f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.487f, -0.873f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.884f, 0.468f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.996f, 0.088f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.788f, -0.616f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.326f, 0.945f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.241f, -0.971f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.730f, 0.683f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.984f, -0.176f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.922f, -0.388f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.562f, 0.827f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.022f, -1.000f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.525f, 0.851f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.904f, -0.428f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.991f, -0.132f, 0.000f,  1.0f, 1.0f, 0.0f,
+		0.760f, 0.650f, 0.000f,  1.0f, 1.0f, 0.0f,
+		-0.284f, -0.959f, 0.000f,  1.0f, 1.0f, 0.0f,
+
+
+
+
+
+
+	};
+
+	glGenVertexArrays(1, &moonVaoID);
+	glBindVertexArray(moonVaoID);
+	glGenBuffers(1, &moonVboID);
+	glBindBuffer(GL_ARRAY_BUFFER, moonVboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(moon), moon, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
@@ -867,35 +942,35 @@ void matrix(string obj) {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(4.0f, 1.0f, 4.0f));
 	}
-	else if (obj == "star") {
-		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 5.0f, -2.0f));
+	else if (obj == "moon") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(x_delta*x_press_num, 5.0f, -5.0f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.5f, 0.5f, 0.5f));
-		modelRotationMatrix =  glm::rotate(glm::mat4(), 7.0f, glm::vec3(0, 1, 0));
+		//modelRotationMatrix =  glm::rotate(glm::mat4(), 7.0f, glm::vec3(0, 1, 0));
 	}
 	else if (obj == "tree0") {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(2.3f, 2.0f, 2.5f));
-		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.4f, 0.4f, 0.4f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.4f+scale_delta*scale_press_num, 0.4f + scale_delta * scale_press_num, 0.4f + scale_delta * scale_press_num));
 		//modelRotationMatrix = glm::rotate(glm::mat4(), clock()*0.0005f*isClockwise, glm::vec3(0, 1, 0));
 		//modelRotationMatrix = glm::rotate(glm::mat4(), 10.0f, glm::vec3(0, 1, 0));
 	}
 	else if (obj == "tree1") {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(1.6f, 2.0f, 3.1f));
-		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.2f, 0.3f, 0.2f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.2f + scale_delta * scale_press_num, 0.3f + scale_delta * scale_press_num, 0.2f + scale_delta * scale_press_num));
 		//modelRotationMatrix = glm::rotate(glm::mat4(), 0.0f, glm::vec3(0, 1, 0));
 	}
 	else if (obj == "tree2") {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(1.8f, 2.0f, 3.5f));
-		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.2f, 0.5f, 0.2f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.2f + scale_delta * scale_press_num, 0.5f + scale_delta * scale_press_num, 0.2f + scale_delta * scale_press_num));
 		// = glm::rotate(glm::mat4(), 3.0f, glm::vec3(0, 1, 0));
 	}
 	else if (obj == "tree3") {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(-1.8f, 2.0f, 3.3f));
-		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.2f, 0.3f, 0.2f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.2f + scale_delta * scale_press_num, 0.3f + scale_delta * scale_press_num, 0.2f + scale_delta * scale_press_num));
 		//modelRotationMatrix = glm::rotate(glm::mat4(), 7.0f, glm::vec3(0, 1, 0));
 	}
 	else if (obj == "tree4") {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(-2.0f, 2.0f, 2.55f));
-		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.3f, 0.4f, 0.3f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.3f + scale_delta * scale_press_num, 0.4f + scale_delta * scale_press_num, 0.3f + scale_delta * scale_press_num));
 		//modelRotationMatrix = glm::rotate(glm::mat4(), 1.0f, glm::vec3(0, 1, 0));
 	}
 	else if (obj == "gate") {
@@ -970,7 +1045,7 @@ void matrix(string obj) {
 void paintGL(void)
 {
 	//printf("%d\t%d\t%d\t%d\n", st_time, ck_time, now_t, ready);
-	printf("%d\n", season);
+	//printf("%d\n", scale_press_num);
 	//TODO:
 	//render your objects and control the transformation here
 	//specify the background color RGBA
@@ -985,6 +1060,10 @@ void paintGL(void)
 	matrix("ground");
 	glBindVertexArray(groundVaoID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	matrix("moon");
+	glBindVertexArray(moonVaoID);
+	glDrawArrays(GL_TRIANGLES, 0, 150);
 
 	matrix("night");
 	glBindVertexArray(nightVaoID);
@@ -1086,6 +1165,10 @@ void paintGL(void)
 	glBindVertexArray(gateVaoID);
 	glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
 
+	if (scale_press_num > 10)
+		scale_press_num = 10;
+	if (scale_press_num < -10)
+		scale_press_num = -10;
 
 
 	/*matrix("star");

@@ -1,6 +1,6 @@
 ﻿  main.cpp
-c:\users\user\source\repos\3260\3260\main.cpp(263): warning C4305: '正在初始化': 從 'double' 轉換為 'const GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\source\repos\3260\3260\main.cpp(325): warning C4305: '正在初始化': 從 'double' 轉換為 'const GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\source\repos\3260\3260\main.cpp(387): warning C4305: '正在初始化': 從 'double' 轉換為 'const GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\source\repos\3260\3260\main.cpp(449): warning C4305: '正在初始化': 從 'double' 轉換為 'const GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\user\source\repos\3260\3260\main.cpp(338): warning C4305: '正在初始化': 從 'double' 轉換為 'const GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\user\source\repos\3260\3260\main.cpp(400): warning C4305: '正在初始化': 從 'double' 轉換為 'const GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\user\source\repos\3260\3260\main.cpp(462): warning C4305: '正在初始化': 從 'double' 轉換為 'const GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\user\source\repos\3260\3260\main.cpp(524): warning C4305: '正在初始化': 從 'double' 轉換為 'const GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
   3260.vcxproj -> C:\Users\user\source\repos\3260\x64\Debug\3260.exe
