@@ -27,6 +27,7 @@ int ah_animated = 0;
 int ready = 0;
 int isClockwise = 1;
 
+int season = 1; //0,1,2,3
 
 bool checkStatus(
 	GLuint objectID,
@@ -128,12 +129,32 @@ void keyboard(unsigned char key, int x, int y)
 		now_t2 = clock();
 		isClockwise = -1;
 	}
+	if (key == 'q')
+	{
+		season = 0;
+	}
+	if (key == 'w')
+	{
+		season = 1;
+	}
+	if (key == 'e')
+	{
+		season = 2;
+	}
+	if (key == 'r')
+	{
+		season = 3;
+	}
 }
 
 
 
 GLuint groundVaoID, groundVboID;
 GLuint ahVaoID, ahVboID;
+GLuint treeVaoID, treeVboID, treeIndicesVboID;
+GLuint tree1VaoID, tree1VboID, tree1IndicesVboID;
+GLuint tree2VaoID, tree2VboID, tree2IndicesVboID;
+GLuint tree3VaoID, tree3VboID, tree3IndicesVboID;
 GLuint starVaoID, starVboID, starIndicesVboID;
 GLuint platformVaoID, platformVboID, platformIndicesVboID;
 GLuint gateVaoID, gateVboID, gateIndicesVboID;
@@ -217,6 +238,254 @@ void sendDataToOpenGL()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
 
+	const float slight = 0.6f;
+	const float woodSize = 0.3f;
+	const GLfloat tree[] =
+	{
+		//green
+		-slight, +1.0f, -slight,  +0.2f, +0.2f, +0.3f, //
+		-1.0f, -1.0f, -1.0f,  0.56f, 0.73f, 0.56f,
+		+slight, +1.0f, -slight,  +0.2f, +0.2f, +0.3f, //
+		+1.0f, -1.0f, -1.0f,  0.56f, 0.73f, 0.56f,
+		-1.0f, -1.0f, +1.0f,  0.56f, 0.73f, 0.56f,
+		+1.0f, -1.0f, +1.0f,  0.56f, 0.73f, 0.56f,
+		+slight, +1.0f, +slight, +0.2f, +0.2f, +0.3f, //
+		-slight, +1.0f, +slight,  +0.2f, +0.2f, +0.3f, //
+		//wood
+		-woodSize, +1.0f  -2.0f, -woodSize,  +0.65, +0.5, +0.39f, //
+		-woodSize, -1.0f - 2.0f, -woodSize,   +0.65, +0.5, +0.39f,
+		+woodSize, +1.0f - 2.0f, -woodSize,  +0.65, +0.5, +0.39f,//
+		+woodSize, -1.0f - 2.0f, -woodSize,   +0.65, +0.5, +0.39f,
+		-woodSize, -1.0f - 2.0f, +woodSize,   +0.65, +0.5, +0.39f,
+		+woodSize, -1.0f - 2.0f, +woodSize, +0.65, +0.5, +0.39f,
+		+woodSize, +1.0f - 2.0f, +woodSize, +0.65, +0.5, +0.39f, //
+		-woodSize, +1.0f - 2.0f, +woodSize,  +0.65, +0.5, +0.39f, //
+	};
+	GLushort treeIndices[] = {
+	  0,2,3,
+	  0,1,3,
+	  0,2,6,
+	  0,7,6,
+	  0,7,4,
+	  0,1,4,
+	  5,6,2,
+	  5,3,2,
+	  5,3,1,
+	  5,1,4,
+	  5,6,7,
+	  5,4,7,
+
+	8,10,11,
+	8,9,11,
+	8,10,14,
+	8,15,14,
+	8,15,12,
+	8,9,12,
+	13,14,10,
+	13,11,10,
+	13,11,9,
+	13,9,12,
+	13,14,15,
+	13,12,15,
+	};
+	glGenVertexArrays(1, &treeVaoID);
+	glBindVertexArray(treeVaoID);
+	glGenBuffers(1, &treeVboID);
+	glBindBuffer(GL_ARRAY_BUFFER, treeVboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tree), tree, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+	glGenBuffers(1, &treeIndicesVboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, treeIndicesVboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(treeIndices) * sizeof(GLushort), treeIndices, GL_STATIC_DRAW);
+
+	//pink
+	const GLfloat tree1[] =
+	{
+		//green
+		-slight, +1.0f, -slight,  +0.2f, +0.2f, +0.3f, //
+		-1.0f, -1.0f, -1.0f,  0.73f, 0.56f, 0.56f,
+		+slight, +1.0f, -slight,  +0.2f, +0.2f, +0.3f, //
+		+1.0f, -1.0f, -1.0f,   0.73f, 0.56f, 0.56f,
+		-1.0f, -1.0f, +1.0f,  0.73f, 0.56f, 0.56f,
+		+1.0f, -1.0f, +1.0f,  0.73f, 0.56f, 0.56f,
+		+slight, +1.0f, +slight, +0.2f, +0.2f, +0.3f, //
+		-slight, +1.0f, +slight,  +0.2f, +0.2f, +0.3f, //
+		//wood
+		-woodSize, +1.0f - 2.0f, -woodSize,  +0.65, +0.5, +0.39f, //
+		-woodSize, -1.0f - 2.0f, -woodSize,   +0.65, +0.5, +0.39f,
+		+woodSize, +1.0f - 2.0f, -woodSize,  +0.65, +0.5, +0.39f,//
+		+woodSize, -1.0f - 2.0f, -woodSize,   +0.65, +0.5, +0.39f,
+		-woodSize, -1.0f - 2.0f, +woodSize,   +0.65, +0.5, +0.39f,
+		+woodSize, -1.0f - 2.0f, +woodSize, +0.65, +0.5, +0.39f,
+		+woodSize, +1.0f - 2.0f, +woodSize, +0.65, +0.5, +0.39f, //
+		-woodSize, +1.0f - 2.0f, +woodSize,  +0.65, +0.5, +0.39f, //
+	};
+	GLushort tree1Indices[] = {
+	  0,2,3,
+	  0,1,3,
+	  0,2,6,
+	  0,7,6,
+	  0,7,4,
+	  0,1,4,
+	  5,6,2,
+	  5,3,2,
+	  5,3,1,
+	  5,1,4,
+	  5,6,7,
+	  5,4,7,
+
+	8,10,11,
+	8,9,11,
+	8,10,14,
+	8,15,14,
+	8,15,12,
+	8,9,12,
+	13,14,10,
+	13,11,10,
+	13,11,9,
+	13,9,12,
+	13,14,15,
+	13,12,15,
+	};
+	glGenVertexArrays(1, &tree1VaoID);
+	glBindVertexArray(tree1VaoID);
+	glGenBuffers(1, &tree1VboID);
+	glBindBuffer(GL_ARRAY_BUFFER, tree1VboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tree1), tree1, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+	glGenBuffers(1, &tree1IndicesVboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tree1IndicesVboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(tree1Indices) * sizeof(GLushort), tree1Indices, GL_STATIC_DRAW);
+
+	//orange
+	const GLfloat tree2[] =
+	{
+		//green
+		-slight, +1.0f, -slight,  +0.2f, +0.2f, +0.3f, //
+		-1.0f, -1.0f, -1.0f,  0.76f, 0.45f, 0.20f,
+		+slight, +1.0f, -slight,  +0.2f, +0.2f, +0.3f, //
+		+1.0f, -1.0f, -1.0f, 0.76f, 0.45f, 0.20f,
+		-1.0f, -1.0f, +1.0f,  0.76f, 0.45f, 0.20f,
+		+1.0f, -1.0f, +1.0f, 0.76f, 0.45f, 0.20f,
+		+slight, +1.0f, +slight, +0.2f, +0.2f, +0.3f, //
+		-slight, +1.0f, +slight,  +0.2f, +0.2f, +0.3f, //
+		//wood
+		-woodSize, +1.0f - 2.0f, -woodSize,  +0.65, +0.5, +0.39f, //
+		-woodSize, -1.0f - 2.0f, -woodSize,   +0.65, +0.5, +0.39f,
+		+woodSize, +1.0f - 2.0f, -woodSize,  +0.65, +0.5, +0.39f,//
+		+woodSize, -1.0f - 2.0f, -woodSize,   +0.65, +0.5, +0.39f,
+		-woodSize, -1.0f - 2.0f, +woodSize,   +0.65, +0.5, +0.39f,
+		+woodSize, -1.0f - 2.0f, +woodSize, +0.65, +0.5, +0.39f,
+		+woodSize, +1.0f - 2.0f, +woodSize, +0.65, +0.5, +0.39f, //
+		-woodSize, +1.0f - 2.0f, +woodSize,  +0.65, +0.5, +0.39f, //
+	};
+	GLushort tree2Indices[] = {
+	  0,2,3,
+	  0,1,3,
+	  0,2,6,
+	  0,7,6,
+	  0,7,4,
+	  0,1,4,
+	  5,6,2,
+	  5,3,2,
+	  5,3,1,
+	  5,1,4,
+	  5,6,7,
+	  5,4,7,
+
+	8,10,11,
+	8,9,11,
+	8,10,14,
+	8,15,14,
+	8,15,12,
+	8,9,12,
+	13,14,10,
+	13,11,10,
+	13,11,9,
+	13,9,12,
+	13,14,15,
+	13,12,15,
+	};
+	glGenVertexArrays(1, &tree2VaoID);
+	glBindVertexArray(tree2VaoID);
+	glGenBuffers(1, &tree2VboID);
+	glBindBuffer(GL_ARRAY_BUFFER, tree2VboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tree2), tree2, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+	glGenBuffers(1, &tree2IndicesVboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tree2IndicesVboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(tree2Indices) * sizeof(GLushort), tree2Indices, GL_STATIC_DRAW);
+
+	//white
+	const GLfloat tree3[] =
+	{
+		//green
+		-slight, +1.0f, -slight,  +0.2f, +0.2f, +0.3f, //
+		-1.0f, -1.0f, -1.0f,  0.9f, 0.9f, 0.9f,
+		+slight, +1.0f, -slight,  +0.2f, +0.2f, +0.3f, //
+		+1.0f, -1.0f, -1.0f,  0.9f, 0.9f, 0.9f,
+		-1.0f, -1.0f, +1.0f,  0.9f, 0.9f, 0.9f,
+		+1.0f, -1.0f, +1.0f,  0.9f, 0.9f, 0.9f,
+		+slight, +1.0f, +slight, +0.2f, +0.2f, +0.3f, //
+		-slight, +1.0f, +slight,  +0.2f, +0.2f, +0.3f, //
+		//wood
+		-woodSize, +1.0f - 2.0f, -woodSize,  +0.65, +0.5, +0.39f, //
+		-woodSize, -1.0f - 2.0f, -woodSize,   +0.65, +0.5, +0.39f,
+		+woodSize, +1.0f - 2.0f, -woodSize,  +0.65, +0.5, +0.39f,//
+		+woodSize, -1.0f - 2.0f, -woodSize,   +0.65, +0.5, +0.39f,
+		-woodSize, -1.0f - 2.0f, +woodSize,   +0.65, +0.5, +0.39f,
+		+woodSize, -1.0f - 2.0f, +woodSize, +0.65, +0.5, +0.39f,
+		+woodSize, +1.0f - 2.0f, +woodSize, +0.65, +0.5, +0.39f, //
+		-woodSize, +1.0f - 2.0f, +woodSize,  +0.65, +0.5, +0.39f, //
+	};
+	GLushort tree3Indices[] = {
+	  0,2,3,
+	  0,1,3,
+	  0,2,6,
+	  0,7,6,
+	  0,7,4,
+	  0,1,4,
+	  5,6,2,
+	  5,3,2,
+	  5,3,1,
+	  5,1,4,
+	  5,6,7,
+	  5,4,7,
+
+	8,10,11,
+	8,9,11,
+	8,10,14,
+	8,15,14,
+	8,15,12,
+	8,9,12,
+	13,14,10,
+	13,11,10,
+	13,11,9,
+	13,9,12,
+	13,14,15,
+	13,12,15,
+	};
+	glGenVertexArrays(1, &tree3VaoID);
+	glBindVertexArray(tree3VaoID);
+	glGenBuffers(1, &tree3VboID);
+	glBindBuffer(GL_ARRAY_BUFFER, tree3VboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tree3), tree3, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+	glGenBuffers(1, &tree3IndicesVboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tree3IndicesVboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(tree3Indices) * sizeof(GLushort), tree3Indices, GL_STATIC_DRAW);
 
 	const GLfloat star[] =
 	{
@@ -254,29 +523,29 @@ void sendDataToOpenGL()
 	//platform
 	const GLfloat platform[] =
 	{
-		-1.0f, +1.0f, -1.0f,  +0.5f, +0.5f, +0.5f,
-		-1.0f, -1.0f, -1.0f,  +0.5f, +0.5f, +0.5f,
-		+1.0f, +1.0f, -1.0f,  +0.8f, +0.8f, +0.8f,
 		-1.0f, +1.0f, -1.0f,  +0.8f, +0.8f, +0.8f,
+		-1.0f, -1.0f, -1.0f,  +0.5f, +0.5f, +0.5f,
+		+1.0f, +1.0f, -1.0f, +0.8f, +0.8f, +0.8f,
+		+1.0f, -1.0f, -1.0f,  +0.5f, +0.5f, +0.5f,
 		-1.0f, -1.0f, +1.0f,  +0.5f, +0.5f, +0.5f,
 		+1.0f, -1.0f, +1.0f,  +0.5f, +0.5f, +0.5f,
-		+1.0f, +1.0f, +1.0f,  +0.8f, +0.8f, +0.8f,
+		+1.0f, +1.0f, +1.0f, +0.8f, +0.8f, +0.8f,
 		-1.0f, +1.0f, +1.0f,  +0.8f, +0.8f, +0.8f,
+
 	};
 	GLushort platformIndices[] = {
-	  0,1,2,
 	  0,2,3,
-	  0,3,7,
-	  0,4,7,
-	  0,4,5,
-	  0,5,1,
-	  6,3,2,
-	  6,3,7,
-	  6,7,4,
-	  6,5,4,
-	  6,2,1,
-	  6,5,1,
-
+	  0,1,3,
+	  0,2,6,
+	  0,7,6,
+	  0,7,4,
+	  0,1,4,
+	  5,6,2,
+	  5,3,2,
+	  5,3,1,
+	  5,1,4,
+	  5,6,7,
+	  5,4,7,
 	};
 
 	glGenVertexArrays(1, &platformVaoID);
@@ -572,9 +841,6 @@ void sendDataToOpenGL()
 		0.724f, -0.593f, 0.000f, 0.90f, 0.91f, 0.98f,
 		0.587f, 0.096f, 0.000f, 0.90f, 0.91f, 0.98f,
 
-
-
-
 	};
 
 	glGenVertexArrays(1, &nightVaoID);
@@ -605,6 +871,32 @@ void matrix(string obj) {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 5.0f, -2.0f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.5f, 0.5f, 0.5f));
 		modelRotationMatrix =  glm::rotate(glm::mat4(), 7.0f, glm::vec3(0, 1, 0));
+	}
+	else if (obj == "tree0") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(2.3f, 2.0f, 2.5f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.4f, 0.4f, 0.4f));
+		//modelRotationMatrix = glm::rotate(glm::mat4(), clock()*0.0005f*isClockwise, glm::vec3(0, 1, 0));
+		//modelRotationMatrix = glm::rotate(glm::mat4(), 10.0f, glm::vec3(0, 1, 0));
+	}
+	else if (obj == "tree1") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(1.6f, 2.0f, 3.1f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.2f, 0.3f, 0.2f));
+		//modelRotationMatrix = glm::rotate(glm::mat4(), 0.0f, glm::vec3(0, 1, 0));
+	}
+	else if (obj == "tree2") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(1.8f, 2.0f, 3.5f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.2f, 0.5f, 0.2f));
+		// = glm::rotate(glm::mat4(), 3.0f, glm::vec3(0, 1, 0));
+	}
+	else if (obj == "tree3") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(-1.8f, 2.0f, 3.3f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.2f, 0.3f, 0.2f));
+		//modelRotationMatrix = glm::rotate(glm::mat4(), 7.0f, glm::vec3(0, 1, 0));
+	}
+	else if (obj == "tree4") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(-2.0f, 2.0f, 2.55f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.3f, 0.4f, 0.3f));
+		//modelRotationMatrix = glm::rotate(glm::mat4(), 1.0f, glm::vec3(0, 1, 0));
 	}
 	else if (obj == "gate") {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 2.0f, -1.2f));
@@ -678,6 +970,7 @@ void matrix(string obj) {
 void paintGL(void)
 {
 	//printf("%d\t%d\t%d\t%d\n", st_time, ck_time, now_t, ready);
+	printf("%d\n", season);
 	//TODO:
 	//render your objects and control the transformation here
 	//specify the background color RGBA
@@ -696,6 +989,77 @@ void paintGL(void)
 	matrix("night");
 	glBindVertexArray(nightVaoID);
 	glDrawArrays(GL_POINTS, 0, 150);
+
+	switch (season) {
+		case 0:
+			matrix("tree0");
+			glBindVertexArray(tree1VaoID);
+			glDrawElements(GL_TRIANGLES, 20 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree1");
+			glBindVertexArray(tree1VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree2");
+			glBindVertexArray(tree1VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree3");
+			glBindVertexArray(tree1VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree4");
+			glBindVertexArray(tree1VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			break;
+		case 1:
+			matrix("tree0");
+			glBindVertexArray(treeVaoID);
+			glDrawElements(GL_TRIANGLES, 20 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree1");
+			glBindVertexArray(treeVaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree2");
+			glBindVertexArray(treeVaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree3");
+			glBindVertexArray(treeVaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree4");
+			glBindVertexArray(treeVaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			break;
+		case 2:
+			matrix("tree0");
+			glBindVertexArray(tree2VaoID);
+			glDrawElements(GL_TRIANGLES, 20 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree1");
+			glBindVertexArray(tree2VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree2");
+			glBindVertexArray(tree2VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree3");
+			glBindVertexArray(tree2VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree4");
+			glBindVertexArray(tree2VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			break;
+		case 3:
+			matrix("tree0");
+			glBindVertexArray(tree3VaoID);
+			glDrawElements(GL_TRIANGLES, 20 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree1");
+			glBindVertexArray(tree3VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree2");
+			glBindVertexArray(tree3VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree3");
+			glBindVertexArray(tree3VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("tree4");
+			glBindVertexArray(tree3VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			break;
+	}
 
 	if (ah_animated == 1) {
 		matrix("people");
