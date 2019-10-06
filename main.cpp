@@ -23,7 +23,7 @@ GLint programID;
 
 float scale_delta = 0.01f;
 int scale_press_num = 0;
-float x_delta = 0.1f;
+float x_delta = 0.05f;
 int x_press_num = 0;
 int ah_animated = 0; 
 int ready = 0;
@@ -169,6 +169,7 @@ void keyboard(unsigned char key, int x, int y)
 
 GLuint groundVaoID, groundVboID;
 GLuint moonVaoID, moonVboID;
+GLuint moon2VaoID, moon2VboID;
 GLuint ahVaoID, ahVboID;
 GLuint treeVaoID, treeVboID, treeIndicesVboID;
 GLuint tree1VaoID, tree1VboID, tree1IndicesVboID;
@@ -206,48 +207,17 @@ void sendDataToOpenGL()
 
 	const GLfloat moon[] =
 	{
-		1.000f, 0.000f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.839f, -0.544f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.408f, 0.913f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.154f, -0.988f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.667f, 0.745f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.965f, -0.262f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.952f, -0.305f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.633f, 0.774f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.110f, -0.994f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.448f, 0.894f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.862f, -0.506f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.999f, -0.044f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.814f, 0.581f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.367f, -0.930f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.198f, 0.980f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.699f, -0.715f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.976f, 0.219f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.938f, 0.347f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.598f, -0.801f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.066f, 0.998f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.487f, -0.873f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.884f, 0.468f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.996f, 0.088f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.788f, -0.616f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.326f, 0.945f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.241f, -0.971f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.730f, 0.683f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.984f, -0.176f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.922f, -0.388f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.562f, 0.827f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.022f, -1.000f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.525f, 0.851f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.904f, -0.428f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.991f, -0.132f, 0.000f,  1.0f, 1.0f, 0.0f,
-		0.760f, 0.650f, 0.000f,  1.0f, 1.0f, 0.0f,
-		-0.284f, -0.959f, 0.000f,  1.0f, 1.0f, 0.0f,
-
-
-
-
-
-
+		-0.72f, 0.8f, 0.0f,  1.0f, 1.0f, 0.0f,
+		-0.52f, 0.8f, 0.0f,  1.0f, 1.0f, 0.0f,
+		-0.35f, 0.64f, 0.0f,  1.0f, 1.0f, 0.0f,
+		-0.3f, 0.48f, 0.0f,  1.0f, 1.0f, 0.0f,
+		-0.35f, 0.3f, 0.0f,  1.0f, 1.0f, 0.0f,
+		-0.52f, 0.16f, 0.0f,  1.0f, 1.0f, 0.0f,
+		-0.72f, 0.16f, 0.0f,  1.0f, 1.0f, 0.0f,
+		-0.9f, 0.3f, 0.0f,  1.0f, 1.0f, 0.0f,
+		-0.95f, 0.48f, 0.0f,  1.0f, 1.0f, 0.0f,
+		-0.9f, 0.64f, 0.0f,  1.0f, 1.0f, 0.0f,
+		-0.72f, 0.8f, 0.0f,  1.0f, 1.0f, 0.0f,
 	};
 
 	glGenVertexArrays(1, &moonVaoID);
@@ -259,6 +229,33 @@ void sendDataToOpenGL()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+
+
+	const GLfloat moon2[] =
+	{
+		-0.72f, 0.8f, 0.0f,  0.0f, 0.0f, 0.15f,
+		-0.52f, 0.8f, 0.0f,  0.0f, 0.0f, 0.15f,
+		-0.35f, 0.64f, 0.0f,  0.0f, 0.0f, 0.15f,
+		-0.3f, 0.48f, 0.0f,  0.0f, 0.0f, 0.15f,
+		-0.35f, 0.3f, 0.0f,  0.0f, 0.0f, 0.15f,
+		-0.52f, 0.16f, 0.0f,  0.0f, 0.0f, 0.15f,
+		-0.72f, 0.16f, 0.0f,  0.0f, 0.0f, 0.15f,
+		-0.9f, 0.3f, 0.0f,  0.0f, 0.0f, 0.15f,
+		-0.95f, 0.48f, 0.0f,  0.0f, 0.0f, 0.15f,
+		-0.9f, 0.64f, 0.0f,  0.0f, 0.0f, 0.15f,
+		-0.72f, 0.8f, 0.0f,  0.0f, 0.0f, 0.15f,
+	};
+
+	glGenVertexArrays(1, &moon2VaoID);
+	glBindVertexArray(moon2VaoID);
+	glGenBuffers(1, &moon2VboID);
+	glBindBuffer(GL_ARRAY_BUFFER, moon2VboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(moon2), moon2, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+
 
 	const GLfloat ah[] =
 	{
@@ -943,8 +940,13 @@ void matrix(string obj) {
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(4.0f, 1.0f, 4.0f));
 	}
 	else if (obj == "moon") {
-		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(x_delta*x_press_num, 5.0f, -5.0f));
-		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.5f, 0.5f, 0.5f));
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(x_delta*x_press_num+1.0f, 4.0f, -4.0f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(1.5f, 1.5f, 1.5f));
+		//modelRotationMatrix =  glm::rotate(glm::mat4(), 7.0f, glm::vec3(0, 1, 0));
+	}
+	else if (obj == "moon2") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.5f, 4.1f, -3.6f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(1.2f, 1.2f, 1.2f));
 		//modelRotationMatrix =  glm::rotate(glm::mat4(), 7.0f, glm::vec3(0, 1, 0));
 	}
 	else if (obj == "tree0") {
@@ -1045,7 +1047,7 @@ void matrix(string obj) {
 void paintGL(void)
 {
 	//printf("%d\t%d\t%d\t%d\n", st_time, ck_time, now_t, ready);
-	//printf("%d\n", scale_press_num);
+	//printf("%d\n", x_press_num);
 	//TODO:
 	//render your objects and control the transformation here
 	//specify the background color RGBA
@@ -1061,9 +1063,14 @@ void paintGL(void)
 	glBindVertexArray(groundVaoID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
+	
 	matrix("moon");
 	glBindVertexArray(moonVaoID);
-	glDrawArrays(GL_TRIANGLES, 0, 150);
+	glDrawArrays(GL_POLYGON, 0, 30);
+
+	matrix("moon2");
+	glBindVertexArray(moon2VaoID);
+	glDrawArrays(GL_POLYGON, 0, 30);
 
 	matrix("night");
 	glBindVertexArray(nightVaoID);
@@ -1170,6 +1177,10 @@ void paintGL(void)
 	if (scale_press_num < -10)
 		scale_press_num = -10;
 
+	if (x_press_num > 30)
+		x_press_num = 30;
+	if (x_press_num < -35)
+		x_press_num = -35;
 
 	/*matrix("star");
 	glBindVertexArray(starVaoID);
