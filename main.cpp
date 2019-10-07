@@ -21,6 +21,9 @@ clock_t now_t2;
 int ck_time = 0;
 GLint programID;
 
+
+float r_delta = 0.1f;
+int r_press_num = 0;
 float scale_delta = 0.01f;
 int scale_press_num = 0;
 float x_delta = 0.05f;
@@ -163,6 +166,16 @@ void keyboard(unsigned char key, int x, int y)
 	{
 		scale_press_num--;
 	}
+	if (season == 3) {
+		if (key == 'c')
+		{
+			r_press_num++;
+		}
+		if (key == 'v')
+		{
+			r_press_num--;
+		}
+	}
 }
 
 
@@ -180,6 +193,7 @@ GLuint platformVaoID, platformVboID, platformIndicesVboID;
 GLuint gateVaoID, gateVboID, gateIndicesVboID;
 GLuint peopleVaoID, peopleVboID, peopleIndicesVboID;
 GLuint nightVaoID, nightVboID;
+GLuint snowmanVaoID, snowmanVboID, snowmanIndicesVboID;
 
 void sendDataToOpenGL()
 {
@@ -333,32 +347,33 @@ void sendDataToOpenGL()
 		+woodSize, +1.0f - 2.0f, +woodSize, +0.65, +0.5, +0.39f, //
 		-woodSize, +1.0f - 2.0f, +woodSize,  +0.65, +0.5, +0.39f, //
 	};
-	GLushort treeIndices[] = {
-	  0,2,3,
-	  0,1,3,
-	  0,2,6,
-	  0,7,6,
-	  0,7,4,
-	  0,1,4,
-	  5,6,2,
-	  5,3,2,
-	  5,3,1,
-	  5,1,4,
-	  5,6,7,
-	  5,4,7,
 
-	8,10,11,
-	8,9,11,
-	8,10,14,
-	8,15,14,
-	8,15,12,
-	8,9,12,
-	13,14,10,
-	13,11,10,
-	13,11,9,
-	13,9,12,
-	13,14,15,
-	13,12,15,
+	GLushort treeIndices[] = {
+		 0,2,3,
+		 0,1,3,
+		 0,2,6,
+		 0,7,6,
+		 0,7,4,
+		 0,1,4,
+		 5,6,2,
+		 5,3,2,
+		 5,3,1,
+		 5,1,4,
+		 5,6,7,
+		 5,4,7,
+
+		8,10,11,
+		8,9,11,
+		8,10,14,
+		8,15,14,
+		8,15,12,
+		8,9,12,
+		13,14,10,
+		13,11,10,
+		13,11,9,
+		13,9,12,
+		13,14,15,
+		13,12,15,
 	};
 	glGenVertexArrays(1, &treeVaoID);
 	glBindVertexArray(treeVaoID);
@@ -396,31 +411,31 @@ void sendDataToOpenGL()
 		-woodSize, +1.0f - 2.0f, +woodSize,  +0.65, +0.5, +0.39f, //
 	};
 	GLushort tree1Indices[] = {
-	  0,2,3,
-	  0,1,3,
-	  0,2,6,
-	  0,7,6,
-	  0,7,4,
-	  0,1,4,
-	  5,6,2,
-	  5,3,2,
-	  5,3,1,
-	  5,1,4,
-	  5,6,7,
-	  5,4,7,
+		  0,2,3,
+		  0,1,3,
+		  0,2,6,
+		  0,7,6,
+		  0,7,4,
+		  0,1,4,
+		  5,6,2,
+		  5,3,2,
+		  5,3,1,
+		  5,1,4,
+		  5,6,7,
+		  5,4,7,
 
-	8,10,11,
-	8,9,11,
-	8,10,14,
-	8,15,14,
-	8,15,12,
-	8,9,12,
-	13,14,10,
-	13,11,10,
-	13,11,9,
-	13,9,12,
-	13,14,15,
-	13,12,15,
+		8,10,11,
+		8,9,11,
+		8,10,14,
+		8,15,14,
+		8,15,12,
+		8,9,12,
+		13,14,10,
+		13,11,10,
+		13,11,9,
+		13,9,12,
+		13,14,15,
+		13,12,15,
 	};
 	glGenVertexArrays(1, &tree1VaoID);
 	glBindVertexArray(tree1VaoID);
@@ -458,31 +473,31 @@ void sendDataToOpenGL()
 		-woodSize, +1.0f - 2.0f, +woodSize,  +0.65, +0.5, +0.39f, //
 	};
 	GLushort tree2Indices[] = {
-	  0,2,3,
-	  0,1,3,
-	  0,2,6,
-	  0,7,6,
-	  0,7,4,
-	  0,1,4,
-	  5,6,2,
-	  5,3,2,
-	  5,3,1,
-	  5,1,4,
-	  5,6,7,
-	  5,4,7,
+		  0,2,3,
+		  0,1,3,
+		  0,2,6,
+		  0,7,6,
+		  0,7,4,
+		  0,1,4,
+		  5,6,2,
+		  5,3,2,
+		  5,3,1,
+		  5,1,4,
+		  5,6,7,
+		  5,4,7,
 
-	8,10,11,
-	8,9,11,
-	8,10,14,
-	8,15,14,
-	8,15,12,
-	8,9,12,
-	13,14,10,
-	13,11,10,
-	13,11,9,
-	13,9,12,
-	13,14,15,
-	13,12,15,
+		8,10,11,
+		8,9,11,
+		8,10,14,
+		8,15,14,
+		8,15,12,
+		8,9,12,
+		13,14,10,
+		13,11,10,
+		13,11,9,
+		13,9,12,
+		13,14,15,
+		13,12,15,
 	};
 	glGenVertexArrays(1, &tree2VaoID);
 	glBindVertexArray(tree2VaoID);
@@ -520,31 +535,31 @@ void sendDataToOpenGL()
 		-woodSize, +1.0f - 2.0f, +woodSize,  +0.65, +0.5, +0.39f, //
 	};
 	GLushort tree3Indices[] = {
-	  0,2,3,
-	  0,1,3,
-	  0,2,6,
-	  0,7,6,
-	  0,7,4,
-	  0,1,4,
-	  5,6,2,
-	  5,3,2,
-	  5,3,1,
-	  5,1,4,
-	  5,6,7,
-	  5,4,7,
+		  0,2,3,
+		  0,1,3,
+		  0,2,6,
+		  0,7,6,
+		  0,7,4,
+		  0,1,4,
+		  5,6,2,
+		  5,3,2,
+		  5,3,1,
+		  5,1,4,
+		  5,6,7,
+		  5,4,7,
 
-	8,10,11,
-	8,9,11,
-	8,10,14,
-	8,15,14,
-	8,15,12,
-	8,9,12,
-	13,14,10,
-	13,11,10,
-	13,11,9,
-	13,9,12,
-	13,14,15,
-	13,12,15,
+		8,10,11,
+		8,9,11,
+		8,10,14,
+		8,15,14,
+		8,15,12,
+		8,9,12,
+		13,14,10,
+		13,11,10,
+		13,11,9,
+		13,9,12,
+		13,14,15,
+		13,12,15,
 	};
 	glGenVertexArrays(1, &tree3VaoID);
 	glBindVertexArray(tree3VaoID);
@@ -925,6 +940,80 @@ void sendDataToOpenGL()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+	const float snowhead = 0.5f;
+	const GLfloat snowman[] =
+	{
+		-1.0f, +1.0f, -1.0f,  +0.8f, +0.8f, +0.8f,
+		-1.0f, -1.0f, -1.0f,  +0.5f, +0.5f, +0.5f,
+		+1.0f, +1.0f, -1.0f, +0.8f, +0.8f, +0.8f,
+		+1.0f, -1.0f, -1.0f,  +0.5f, +0.5f, +0.5f,
+		-1.0f, -1.0f, +1.0f,  +0.5f, +0.5f, +0.5f,
+		+1.0f, -1.0f, +1.0f,  +0.5f, +0.5f, +0.5f,
+		+1.0f, +1.0f, +1.0f, +0.8f, +0.8f, +0.8f,
+		-1.0f, +1.0f, +1.0f,  +0.8f, +0.8f, +0.8f,
+
+		-snowhead, +snowhead + 2.0f, -snowhead,  +0.8f, +0.8f, +0.8f,
+		-snowhead, -1.0f + 2.0f, -snowhead,  +0.5f, +0.5f, +0.5f,
+		+snowhead, +snowhead + 2.0f, -snowhead, +0.8f, +0.8f, +0.8f,
+		+snowhead, -1.0f + 2.0f, -snowhead,  +0.5f, +0.5f, +0.5f,
+		-snowhead, -1.0f + 2.0f, +snowhead,  +0.5f, +0.5f, +0.5f,
+		+snowhead, -1.0f + 2.0f, +snowhead,  +0.5f, +0.5f, +0.5f,
+		+snowhead, +snowhead + 2.0f, +snowhead, +0.8f, +0.8f, +0.8f,
+		-snowhead, +snowhead + 2.0f, +snowhead,  +0.8f, +0.8f, +0.8f,
+
+		-snowhead, +snowhead + 2.0f, -snowhead,  +1.0f, +0.0f, +0.0f,
+		+snowhead, +snowhead + 2.0f, -snowhead, +1.0f, +0.0f, +0.0f,
+		+snowhead, +snowhead + 2.0f, +snowhead, +1.0f, +0.0f, +0.0f,
+		-snowhead, +snowhead + 2.0f, +snowhead,  +1.0f, +0.0f, +0.0f,
+		0.0f, +4.0f, 0.0f,  +0.2f, +0.2f, +0.3f,
+
+	};
+	GLushort snowmanIndices[] = {
+		  0,2,3,
+		  0,1,3,
+		  0,2,6,
+		  0,7,6,
+		  0,7,4,
+		  0,1,4,
+		  5,6,2,
+		  5,3,2,
+		  5,3,1,
+		  5,1,4,
+		  5,6,7,
+		  5,4,7,
+
+		8,10,11,
+		8,9,11,
+		8,10,14,
+		8,15,14,
+		8,15,12,
+		8,9,12,
+		13,14,10,
+		13,11,10,
+		13,11,9,
+		13,9,12,
+		13,14,15,
+		13,12,15,
+
+		16,17,20,
+		17,18,20,
+		18,19,20,
+		16,19,20,
+
+	};
+
+	glGenVertexArrays(1, &snowmanVaoID);
+	glBindVertexArray(snowmanVaoID);
+	glGenBuffers(1, &snowmanVboID);
+	glBindBuffer(GL_ARRAY_BUFFER, snowmanVboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(snowman), snowman, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (char*)(3 * sizeof(float)));
+	glGenBuffers(1, &snowmanIndicesVboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, snowmanIndicesVboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(snowmanIndices) * sizeof(GLushort), snowmanIndices, GL_STATIC_DRAW);
 
 }
 
@@ -974,6 +1063,11 @@ void matrix(string obj) {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(-2.0f, 2.0f, 2.55f));
 		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.3f + scale_delta * scale_press_num, 0.4f + scale_delta * scale_press_num, 0.3f + scale_delta * scale_press_num));
 		//modelRotationMatrix = glm::rotate(glm::mat4(), 1.0f, glm::vec3(0, 1, 0));
+	}
+	else if (obj == "snowman") {
+		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(1.5f, 1.0f, 2.3f));
+		modelScalingMatrix = glm::scale(glm::mat4(), glm::vec3(0.3f, 0.3f, 0.3f));
+		modelRotationMatrix = glm::rotate(glm::mat4(), r_delta*r_press_num, glm::vec3(0, 1, 0));
 	}
 	else if (obj == "gate") {
 		modelTransformMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 2.0f, -1.2f));
@@ -1032,22 +1126,22 @@ void matrix(string obj) {
 	glUniformMatrix4fv(modelScalingMatrixUniformLocation, 1, GL_FALSE, &modelScalingMatrix[0][0]);
 
 	glm::mat4 Projection = glm::perspective(30.0f, 1.0f, 2.0f, 20.0f);
-	glm::mat4 View = glm::lookAt(
+	glm::mat4 Lookat = glm::lookAt(
 		glm::vec3(0, 5.0, 0),
 		glm::vec3(0, 0, -10),
 		glm::vec3(0, -1, 0)
 	);
-	glm::mat4 Model = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.5f, -5.0f));;
-	glm::mat4 mvp = Projection * View * Model;
+	glm::mat4 Tmp = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.5f, -5.0f));;
+	glm::mat4 ProjectionMatrix = Projection * Lookat * Tmp;
 	GLuint MatrixID = glGetUniformLocation(programID, "projectionMatrix");
-	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &ProjectionMatrix[0][0]);
 }
 
 
 void paintGL(void)
 {
 	//printf("%d\t%d\t%d\t%d\n", st_time, ck_time, now_t, ready);
-	//printf("%d\n", x_press_num);
+	// printf("%d\n", x_press_num);
 	//TODO:
 	//render your objects and control the transformation here
 	//specify the background color RGBA
@@ -1143,6 +1237,9 @@ void paintGL(void)
 			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
 			matrix("tree4");
 			glBindVertexArray(tree3VaoID);
+			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
+			matrix("snowman");
+			glBindVertexArray(snowmanVaoID);
 			glDrawElements(GL_TRIANGLES, 40 * sizeof(float), GL_UNSIGNED_SHORT, nullptr);
 			break;
 	}

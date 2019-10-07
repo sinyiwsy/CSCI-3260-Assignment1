@@ -17,6 +17,8 @@ Manipulation:
 	Key "w" : change the season to summer.
 	Key "e" : change the season to autume.
 	Key "r" : change the season to winter.
+	-Key "c" : rotate the snowman anti-clockwised in the winter.
+	-Key "v" : rotate the snowman clockwised in the winter.
 	Key "z" : scale down trees.
 	Key "x" : scale up trees.
 	Key "n" : move the moon to left. 
